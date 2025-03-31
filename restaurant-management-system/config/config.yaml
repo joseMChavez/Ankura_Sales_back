@@ -1,0 +1,16 @@
+database:
+  host: localhost
+  port: 5432
+  user: your_username
+  password: your_password
+  dbname: restaurant_management
+
+server:
+  port: 8080
+  read_timeout: 10s
+  write_timeout: 10s
+  idle_timeout: 120s
+
+log:
+  level: info
+  file: logs/app.log
