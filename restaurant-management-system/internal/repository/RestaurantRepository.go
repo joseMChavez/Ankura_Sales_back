@@ -10,6 +10,7 @@ import (
 type RestaurantRepository interface {
 	Create(restaurant models.Restaurant) error
 	GetByID(id string) (models.Restaurant, error)
+	GetAll() ([]models.Restaurant, error)
 	Update(restaurant models.Restaurant) error
 	Delete(id string) error
 }
@@ -17,6 +18,13 @@ type RestaurantRepository interface {
 // RestaurantRepositoryImpl es la implementación de la interfaz RestaurantRepository
 type RestaurantRepositoryImpl struct {
 	DB *gorm.DB
+}
+
+// GetAll implements RestaurantRepository.
+func (r *RestaurantRepositoryImpl) GetAll() ([]models.Restaurant, error) {
+	var restaurants []models.Restaurant
+	err := r.DB.Find(&restaurants).Error
+	return restaurants, err
 }
 
 // NewRestaurantRepository crea una nueva instancia de RestaurantRepositoryImpl
