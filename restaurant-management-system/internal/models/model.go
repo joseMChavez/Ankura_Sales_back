@@ -2,12 +2,39 @@ package models
 
 import "time"
 
+// Tabla: restaurants// Tabla: kitchen
+
 // Tabla: restaurants
 type Restaurant struct {
-	ID       string     `json:"id" gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
-	Name     string     `json:"name" gorm:"type:varchar(255);not null"`
-	Location string     `json:"location" gorm:"type:text;not null"`
-	Menu     []MenuItem `json:"menu" gorm:"foreignKey:RestaurantID"`
+	ID       string    `json:"id" gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
+	Name     string    `json:"name" gorm:"type:varchar(255);not null"`
+	Location string    `json:"location" gorm:"type:text;not null"`
+	Kitchens []Kitchen `json:"kitchens" gorm:"foreignKey:RestaurantID"`
+}
+
+// Tabla: kitchen
+type Kitchen struct {
+	ID           int    `json:"id" gorm:"primaryKey;autoIncrement"`
+	RestaurantID string `json:"restaurant_id" gorm:"type:uuid;not null"`
+	Name         string `json:"name" gorm:"type:varchar(255);not null"`
+	Description  string `json:"description" gorm:"type:text"`
+	Menues       []Menu `json:"menues" gorm:"foreignKey:KitchenID"`
+}
+
+// Tabla: menues
+type Menu struct {
+	ID        string     `json:"id" gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
+	KitchenID int        `json:"kitchen_id" gorm:"not null"`
+	Name      string     `json:"name" gorm:"type:varchar(255);not null"`
+	Items     []MenuItem `json:"items" gorm:"foreignKey:MenuID"`
+}
+
+// Tabla: menu_items
+type MenuItem struct {
+	ID        string `json:"id" gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
+	ImageURL  string `json:"image_url" gorm:"type:text;not null"`
+	ProductID int    `json:"product_id" gorm:"not null"`
+	MenuID    string `json:"menu_id" gorm:"type:uuid;not null"`
 }
 
 // Tabla: orders.tables
@@ -33,14 +60,6 @@ type Product struct {
 	Time       int     `json:"time" gorm:"not null"`
 	LaborCost  float64 `json:"labor_cost" gorm:"type:numeric(10,2);not null"`
 	IVA        float64 `json:"iva" gorm:"type:numeric(5,2);default:0.00"`
-}
-
-// Tabla: menu_items
-type MenuItem struct {
-	ID           string `json:"id" gorm:"type:uuid;default:gen_random_uuid();primaryKey"`
-	RestaurantID string `json:"restaurant_id" gorm:"type:uuid;not null"`
-	Name         string `json:"name" gorm:"type:varchar(255);not null"`
-	ProductID    int    `json:"product_id" gorm:"not null"`
 }
 
 // Tabla: Inventories.Ingredients
